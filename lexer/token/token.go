@@ -5,6 +5,7 @@ const (
     WHITE_SPACE = 1 << ' '
     TAB = 1 << '\t'
     LINE_FEED = 1 << '\n'
+    EOF = 0
 )
 
 func IsValid(char rune) bool {
@@ -16,8 +17,12 @@ type Token struct {
     Position int
 }
 
+
 func (self Token) String() string {
-    switch self.Type {
+    return self.Type.String()
+}
+func (self Type) String() string {
+    switch self {
         case WHITE_SPACE:
             return "SPACE"
         case TAB:

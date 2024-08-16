@@ -14,6 +14,7 @@ func main() {
         fmt.Println("usage: gospace FILE")
         return
     }
+
     l, err := lexer.NewLexerFromFile(args[0])
     if err != nil {
         fmt.Println(err)

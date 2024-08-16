@@ -17,12 +17,12 @@ type Lexer interface {
 func ReadAll(self Lexer) []*token.Token {
     tokens := []*token.Token{}
     cur, err := self.Pop()
-    for err == nil {
+    for err == nil && cur.Type != token.EOF {
         tokens = append(tokens, cur)
         cur, err = self.Pop()
     }
 
-    if err != io.EOF {
+    if err != nil {
         panic(err)
     }
     return tokens
@@ -67,13 +67,18 @@ func (self *ReaderLexer) nextToken(consume bool) (next *token.Token, err error) 
         next = self.tokenCache
     } else {
         char, err := self.nextRune()
-        if err != nil {
+        if err == io.EOF {
+            next = &token.Token {
+                Type: token.EOF,
+                Position: self.bytesRead,
+            }
+        } else if err != nil {
             return nil, err
-        }
-
-        next = &token.Token{
-            Type: 1 << char,
-            Position: self.bytesRead,
+        } else {
+            next = &token.Token{
+                Type: 1 << char,
+                Position: self.bytesRead,
+            }
         }
     }
 

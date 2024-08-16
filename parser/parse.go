@@ -1,7 +1,7 @@
 package parser
 
 import (
-    "errors"
+    "fmt"
     "io"
 
     "github.com/ohhfishal/gospace/lexer"
@@ -21,7 +21,13 @@ type Parser struct {
     lexer lexer.Lexer
     program *ir.Program
     err error
+}
 
+type ParseError struct {
+    Message string
+}
+func (self ParseError) Error() string {
+    return self.Message
 }
 
 func (self *Parser) consume(matchType token.Type) *token.Token {
@@ -30,7 +36,8 @@ func (self *Parser) consume(matchType token.Type) *token.Token {
         panic(err)
     }
     if next.Type != matchType {
-        panic(errors.New("Invalid Token Found"))
+        err = ParseError{fmt.Sprintf("Found: [%s] at %d.\nExpected: [%s].", next.Type, next.Position, matchType)}
+        panic(err)
     }
     return next
 }
