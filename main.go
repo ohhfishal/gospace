@@ -5,6 +5,7 @@ import (
     "os"
 
     "github.com/ohhfishal/gospace/lexer"
+    "github.com/ohhfishal/gospace/parser"
 )
 
 func main() {
@@ -18,5 +19,9 @@ func main() {
         fmt.Println(err)
         return
     }
-    lexer.Dump(l)
+
+    _, err = parser.Parse(l)
+    if err != nil {
+        fmt.Println(err)
+    }
 }
