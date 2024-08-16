@@ -37,6 +37,6 @@ type Instruction struct {
     Number *Number
 }
 
-type Program struct {
-    Instructions []Instruction
-}
+type Program []Instruction
+
+
