@@ -30,6 +30,10 @@ type Parser struct {
     err error
 }
 
+func (self *Parser) addInstruction(instruction ir.Instruction()) {
+	self.program.AddInstruction(instruction)
+}
+
 type ParseError struct {
     Message string
 }
@@ -101,20 +105,33 @@ func (self *Parser) stack() {
     switch self.peek() {
         case WHITE_SPACE:
             self.consume(WHITE_SPACE)
-            _ = self.number()
+	    number := self.number()
             // OP_PUSH
+	    self.addInstruction(ir.Instruction{
+		Type: OP_PUSH,
+		Number: number,
+	    })
         case LINE_FEED:
             self.consume(LINE_FEED)
             switch self.peek() {
                 case WHITE_SPACE:
                     self.consume(WHITE_SPACE)
                     // OP_DUPLICATE
+		    // Type Type
+		    // Label *Label
+		    // Number *Number
                 case LINE_FEED:
                     self.consume(LINE_FEED)
                     // OP_DISCARD
+		    // Type Type
+		    // Label *Label
+		    // Number *Number
                 case TAB:
                     self.consume(TAB)
                     // OP_SWAP
+		    // Type Type
+		    // Label *Label
+		    // Number *Number
                 default:
                     panicParseError("Stack-LF, got EOF")
             }

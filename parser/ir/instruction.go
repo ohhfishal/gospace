@@ -39,4 +39,8 @@ type Instruction struct {
 
 type Program []Instruction
 
+func (self *Program) AddInstruction(inst Instruction) {
+	*self = append(self, inst)
+}
+
 
